@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -15,35 +16,40 @@
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name="ch.abler.aline.alarmdroid.syncadapter.AuthenticatorService" >
+
+        <service android:name=".syncadapter.AuthenticatorService">
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator" />
             </intent-filter>
+
             <meta-data
                 android:name="android.accounts.AccountAuthenticator"
-                android:resource="@xml/authenticator"
-                />
+                android:resource="@xml/authenticator" />
         </service>
         <service
-            android:name="ch.abler.aline.alarmdroid.syncadapter.AlarmSyncService"
+            android:name=".syncadapter.AlarmSyncService"
             android:exported="true"
-            android:process=":sync" >
+            android:process=":sync">
             <intent-filter>
                 <action android:name="android.content.SyncAdapter" />
             </intent-filter>
-            <meta-data android:name="android.content.SyncAdapter"
-                android:resource="@xml/syncadapter"
-                />
+
+            <meta-data
+                android:name="android.content.SyncAdapter"
+                android:resource="@xml/syncadapter" />
         </service>
+
         <provider
+            android:name=".syncadapter.DummyProvider"
             android:authorities="ch.abler.aline.alarmdroid.syncadapter"
-            android:name="ch.abler.aline.alarmdroid.syncadapter.DummyProvider"
             android:exported="false"
-            android:syncable="true"
-            />
+            android:syncable="true" />
+
+        <activity android:name=".syncadapter.AuthenticatorActivity"></activity>
     </application>
 
 </manifest>

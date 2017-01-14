@@ -18,20 +18,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        account = createSyncAccount(this);
-    }
-
-    public static Account createSyncAccount(Context context) {
-        Account newAccount = new Account(ACCOUNT, ACCOUNT_TYPE);
-        AccountManager am = (AccountManager) context.getSystemService(ACCOUNT_SERVICE);
-
-        if (am.addAccountExplicitly(newAccount, null, null)) {
-            debug("Account added");
-        }
-        else {
-            debug("Adding account failed");
-        }
-        return newAccount;
     }
 
     private static void debug(String msg) {

@@ -1,27 +1,22 @@
 package ch.abler.aline.alarmdroid.syncadapter;
 
 import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.AlarmManager;
 import android.app.Service;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
 import android.content.Context;
 import android.content.SyncResult;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class AlarmSyncAdapter extends AbstractThreadedSyncAdapter {
     DatagramSocket sock;
@@ -38,7 +33,7 @@ public class AlarmSyncAdapter extends AbstractThreadedSyncAdapter {
 
     void setUpSock() {
         try {
-            sock = new DatagramSocket(7887);
+            sock = new DatagramSocket(0);
         }
         catch (SocketException e) {
             debug("Error during socket creation: " + e.getMessage());
@@ -49,29 +44,29 @@ public class AlarmSyncAdapter extends AbstractThreadedSyncAdapter {
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
 
         String data;
-        try {
-            AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(Service.ALARM_SERVICE);
+        String serverAddr;
+        int serverPort;
+        AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(Service.ALARM_SERVICE);
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                AlarmManager.AlarmClockInfo clockInfo = alarmManager.getNextAlarmClock();
-                if (clockInfo != null) {
-                    data = Long.toString(clockInfo.getTriggerTime());
-                }
-                else data = "none";
-            } else {
-                data = "none";
-            }
+        // get next alarm
+        AlarmManager.AlarmClockInfo clockInfo = alarmManager.getNextAlarmClock();
+        if (clockInfo != null) {
+            data = Long.toString(clockInfo.getTriggerTime());
         }
-        catch (Exception e) {
-            data = e.getMessage();
-        }
-        try {
+        else data = "none";
 
-            InetAddress inetAddr = InetAddress.getByName("192.168.0.114");
+        // get account data
+        AccountManager accountManager = AccountManager.get(getContext());
+        serverAddr = accountManager.getUserData(account, Constants.KEY_SERVER_ADDR);
+        serverPort = Integer.parseInt(accountManager.getUserData(account, Constants.KEY_SERVER_PORT));
+
+        // send alarm data
+        try {
+            InetAddress inetAddr = InetAddress.getByName(serverAddr);
             byte[] outData = data.getBytes();
 
             sock.send(
-                    new DatagramPacket( outData, outData.length, inetAddr, 7887)
+                    new DatagramPacket( outData, outData.length, inetAddr, serverPort)
             );
         }
         catch (UnknownHostException e) {
