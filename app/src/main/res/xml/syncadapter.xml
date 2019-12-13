@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<sync-adapter xmlns:android="http://schemas.android.com/apk/res/android"
-    android:contentAuthority="ch.abler.aline.alarmdroid.syncadapter"
-    android:accountType="aline.abler.ch"
-    android:userVisible="true"
-    android:supportsUploading="true"
-    android:isAlwaysSyncable="true"
-     />
+<sync-adapter
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:contentAuthority="ch.abler.aline.alarmdroid.provider"
+        android:accountType="ch.abler.aline.alarmdroid"
+        android:userVisible="true"
+        android:supportsUploading="true"
+        android:allowParallelSyncs="true"
+        android:isAlwaysSyncable="true"/>

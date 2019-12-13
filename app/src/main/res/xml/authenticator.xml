@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<account-authenticator xmlns:android="http://schemas.android.com/apk/res/android"
-    android:accountType="aline.abler.ch"
-    android:icon="@drawable/alarm"
-    android:smallIcon="@drawable/alarm"
-    android:label="@string/app_name">
+<account-authenticator
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:accountType="ch.abler.aline.alarmdroid"
+        android:icon="@drawable/alarm"
+        android:smallIcon="@drawable/alarm"
+        android:label="@string/app_name">
 
 </account-authenticator>

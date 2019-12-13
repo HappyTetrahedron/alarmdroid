@@ -1,55 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="ch.abler.aline.alarmdroid">
+          package="ch.abler.aline.alarmdroid">
 
-    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
 
     <application
-        android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+            android:allowBackup="true"
+            android:icon="@mipmap/ic_launcher"
+            android:label="@string/app_name"
+            android:roundIcon="@mipmap/ic_launcher_round"
+            android:supportsRtl="true"
+            android:networkSecurityConfig="@xml/network_security_config"
+            android:theme="@style/AppTheme">
         <activity android:name=".MainActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-
-        <service android:name=".syncadapter.AuthenticatorService">
+        <activity android:name=".AuthenticatorActivity"></activity>
+        <service
+                android:name=".sync.AlarmAuthenticatorService"
+                android:exported="true">
             <intent-filter>
-                <action android:name="android.accounts.AccountAuthenticator" />
+                <action android:name="android.accounts.AccountAuthenticator"/>
             </intent-filter>
 
             <meta-data
                 android:name="android.accounts.AccountAuthenticator"
                 android:resource="@xml/authenticator" />
+
         </service>
         <service
-            android:name=".syncadapter.AlarmSyncService"
-            android:exported="true"
-            android:process=":sync">
+            android:name="ch.abler.aline.alarmdroid.sync.AlarmSyncService"
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.content.SyncAdapter" />
             </intent-filter>
-
-            <meta-data
-                android:name="android.content.SyncAdapter"
-                android:resource="@xml/syncadapter" />
+            <meta-data android:name="android.content.SyncAdapter"
+                       android:resource="@xml/syncadapter" />
         </service>
-
-        <provider
-            android:name=".syncadapter.DummyProvider"
-            android:authorities="ch.abler.aline.alarmdroid.syncadapter"
-            android:exported="false"
-            android:syncable="true" />
-
-        <activity android:name=".syncadapter.AuthenticatorActivity"></activity>
+        <provider android:name=".sync.DummyContentProvider"
+                  android:authorities="ch.abler.aline.alarmdroid.provider"
+                  android:exported="true"
+                  android:syncable="true"
+                />
     </application>
 
 </manifest>

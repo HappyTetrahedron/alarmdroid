@@ -1,7 +1,3 @@
 <resources>
     <string name="app_name">AlarmDroid</string>
-    <string name="account_name">account name</string>
-    <string name="submit">submit</string>
-    <string name="server_address">server address</string>
-    <string name="server_port">port</string>
 </resources>
